@@ -23,6 +23,8 @@ source env/bin/activate
 ```
 python app.py
 ```
+Note: Pip install any missing modules on your device
+
 5. Open the web application on your browser at the following link:
 
 http://127.0.0.1:8050/
