@@ -208,15 +208,17 @@ def update_elements(asset_name,corr_method,start_date,end_date):
             dat1 = start_date
             dat2 = end_date
             asset_edges = dTimeWarp(dat1,dat2,asset,data,c,edges)
-            color_dict = {}
+            color_dict = {"US": "red", "JP": "blue", "IN": "green", "CN": "purple", "commodity": "white"}
             temp_dict = {}
-            color_list = ["red", "blue", "green", "purple", "white", "red", "red", "red"]
             i = 0
 
             if ":" in asset:
                 color = asset[-2:]
             else:
                 color = "commodity"
+
+            final_dict_list.append({'data': {'id': asset, 'label': asset,'style': {'color':'white'}}, 'classes': color_dict[color]})
+
                 
             for edge in asset_edges:
                 temp = ""
@@ -231,18 +233,15 @@ def update_elements(asset_name,corr_method,start_date,end_date):
                     temp_dict[temp] += 1
                 else:
                     temp_dict[temp] = 1
-                    color_dict[temp] = color_list[i]
                     i += 1
                 
                 final_dict_list.append({'data': {'id': edge[0], 'label': edge[0],'style': {'color':'white'}}, 'classes': color_dict[temp]})
                 final_dict_list.append({'data': {'source': asset, 'target': edge[0], 'weight': edge[1]}})
-                final_dict_list.append({'data': {'id': asset, 'label': asset,'style': {'color':'white'}}, 'classes': color_dict[color]})
         else:
             asset_edges = edges.loc[edges['asset_1'] == asset]
             asset_edges = asset_edges.sort_values(by=['correlation'], ascending=False)
             temp_dict = {}
-            color_dict = {}
-            color_list = ["red", "blue", "green", "purple", "white", "red", "red", "red"]
+            color_dict = {"US": "red", "JP": "blue", "IN": "green", "CN": "purple", "commodity": "white"}
             i = 0
 
             color = None
@@ -251,6 +250,8 @@ def update_elements(asset_name,corr_method,start_date,end_date):
                 color = asset[-2:]
             else:
                 color = "commodity"
+            
+            final_dict_list.append({'data': {'id': asset, 'label': asset,'style': {'color':'white'}}, 'classes': color_dict[color]})
             
             for index, row in asset_edges.iterrows():
                 
@@ -266,15 +267,11 @@ def update_elements(asset_name,corr_method,start_date,end_date):
                     temp_dict[temp] += 1
                 else:
                     temp_dict[temp] = 1
-                    color_dict[temp] = color_list[i]
                     i += 1
                 
                 final_dict_list.append({'data': {'id': row['asset_2'], 'label': row['asset_2']}, 'classes': color_dict[temp]})
                 final_dict_list.append({'data': {'source': asset, 'target': row['asset_2'], 'weight': row['correlation']}})
-                if color != color_dict.keys():
-                    final_dict_list.append({'data': {'id': asset, 'label': asset,'style': {'color':'white'}}, 'classes': 'red'})
-                else:
-                    final_dict_list.append({'data': {'id': asset, 'label': asset,'style': {'color':'white'}}, 'classes': color_dict[color]})
+
 
     return final_dict_list
 
